@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.31410.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorIceCandidates", "BlazorIceCandidates\BlazorIceCandidates.csproj", "{9F5DEC4F-C31C-4675-A206-6C97C2D66252}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebRTCme.Bindings.Blazor", "..\WebRTCme\WebRTCme.Bindings\WebRTCme.Bindings.Blazor\WebRTCme.Bindings.Blazor.csproj", "{A8369A74-7E60-472C-9CE8-49DDA5A16619}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebRTCme.Api", "..\WebRTCme\WebRTCme.Api\WebRTCme.Api.csproj", "{3E5AB823-B22F-406D-8143-04BC49096EAB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{9F5DEC4F-C31C-4675-A206-6C97C2D66252}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F5DEC4F-C31C-4675-A206-6C97C2D66252}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F5DEC4F-C31C-4675-A206-6C97C2D66252}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8369A74-7E60-472C-9CE8-49DDA5A16619}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8369A74-7E60-472C-9CE8-49DDA5A16619}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8369A74-7E60-472C-9CE8-49DDA5A16619}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8369A74-7E60-472C-9CE8-49DDA5A16619}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E5AB823-B22F-406D-8143-04BC49096EAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E5AB823-B22F-406D-8143-04BC49096EAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E5AB823-B22F-406D-8143-04BC49096EAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E5AB823-B22F-406D-8143-04BC49096EAB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
