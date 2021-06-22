@@ -1,0 +1,111 @@
+﻿@page "/counter"
+
+@using Microsoft.Extensions.Logging
+@using System.Threading;
+@using WebRTCme
+
+@inject IJSRuntime JsRuntime
+@inject ILogger<Counter> Logger
+
+<h1>Counter</h1>
+
+<p>Current count: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+
+<button class="btn btn-primary" @onclick="GetIceCandidatesAsync">ICE candidates</button>
+
+
+@code {
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+
+
+    async Task GetIceCandidatesAsync()
+    {
+        List<IRTCIceCandidate> iceCandidates = new();
+        TaskCompletionSource<object> tcs = new();
+        Timer timer = null;
+        int count = 0;
+
+        var window = WebRTCme.Bindings.Blazor.Api.Window.Create(JsRuntime);
+        var navigator = window.Navigator();
+        var mediaDevices = navigator.MediaDevices;
+        var mediaStream = await mediaDevices.GetUserMedia(new MediaStreamConstraints
+        {
+            Audio = new MediaStreamContraintsUnion { Value = true },
+            Video = new MediaStreamContraintsUnion { Value = true }
+        });
+
+
+        var peerConnection = window.RTCPeerConnection(new RTCConfiguration
+        {
+            IceServers = new RTCIceServer[]
+            {
+                new RTCIceServer
+                {
+                    Urls = new string[]
+                    {
+                        "stun:stun.stunprotocol.org:3478",
+                        "stun:stun.l.google.com:19302"
+                    },
+                },
+            },
+        });
+
+        peerConnection.OnIceCandidate += OnIceCandidate;
+
+@*        var dataChannel = peerConnection.CreateDataChannel(
+            "DummyDataChannel",
+            new RTCDataChannelInit
+            {
+                Negotiated = false,
+            });
+*@
+
+        var videoTrack = mediaStream.GetVideoTracks().FirstOrDefault();
+        var audioTrack = mediaStream.GetAudioTracks().FirstOrDefault();
+        peerConnection.AddTrack(videoTrack, mediaStream);
+        peerConnection.AddTrack(audioTrack, mediaStream);
+        
+
+        var offerDescription = await peerConnection.CreateOffer();
+        await peerConnection.SetLocalDescription(offerDescription);
+
+        await tcs.Task;
+
+        peerConnection.OnIceCandidate -= OnIceCandidate;
+        peerConnection.Close();
+        peerConnection.Dispose();
+
+        var array = iceCandidates.ToArray();
+
+        void OnIceCandidate(object s, IRTCPeerConnectionIceEvent e)
+        {
+            if (e.Candidate is not null)
+            {
+                timer?.Dispose();
+                // Start a timeout after each ice candidate.
+                timer = new Timer((state) =>
+                {
+                    Logger.LogInformation($"---> timer elapsed");
+                    tcs.TrySetResult(null);
+                },
+                null, 5000, Timeout.Infinite);
+
+                Logger.LogInformation($"iceCandidate #{++count}: {e.Candidate.Candidate}");
+                iceCandidates.Add(e.Candidate);
+
+            }
+            else
+                tcs.TrySetResult(null);
+        }
+
+
+    }
+}
